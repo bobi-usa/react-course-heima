@@ -1,4 +1,5 @@
 // 1. 导包
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 // 2. 创建 React 根对象
@@ -19,4 +20,15 @@ root.render(
       alt="头像"
     />
   </div>
+);
+
+console.log(<h1 className="bbb">Hello World!</h1>);
+console.log(
+  React.createElement(
+    'h1',
+    {
+      className: 'aaa',
+    },
+    'Hello World!'
+  )
 );
