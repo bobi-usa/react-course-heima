@@ -1,32 +1,61 @@
-// 头像组件
-// 2. 通过函数参数接收 props
-// const Avatar = props => {
-//   console.log('props:', props)
-//   // 注意： props 是只读的对象
-//   // props.imgUrl = 'xxx'
-//   return (<img src={props.imgUrl} width={props.size} alt="" />)
-// }
+import classNames from "classnames"
+import { useState } from "react"
+import './App.scss'
 
-// 推荐：可以使用解构来简化 props 的使用
-// size = 50 用于给 size prop 设置默认值
-const Avatar = ({ imgUrl, size = 50 }) => {
-  return (<img src={imgUrl} width={size} alt="" />)
+// 父子组件通讯
+// 父 -> 子 （功能：渲染任务列表）
+// 子 -> 父 （功能：切换任务完成状态）
+//   2.1 父组件准备修改状态的函数，并传递给子组件
+//   2.2 子组件调用函数，并回传数据
+
+// 子组件
+const Todo = ({ id, text, done, handle }) => {
+  return (
+    <div className={classNames('todo', done && 'todo-done')}>
+      <div onClick={() => { handle(id) }}>{text}</div>
+      <button>X</button>
+    </div>
+  )
 }
 
-const App = () => {
-  return (
-    <div>
-      {/* 头像组件 */}
-      {/* 1. 给组件传递 props */}
-      {/* 如果要给组件传递非字符串类型的数据， 需要使用 {} 来传递 */}
-      <Avatar
-        size={100}
-        imgUrl="https://himg.bdimg.com/sys/portrait/item/public.1.b0f75b4f.gVariaQwzy_hz4WmRhvS-g.jpg"
-      />
+// 任务列表数据
+const defaultTodos = [
+  { id: 1, text: '学习React', done: false },
+  { id: 2, text: '休息', done: true },
+  { id: 3, text: '吃饭', done: false },
+]
 
-      <Avatar
-        imgUrl="https://himg.bdimg.com/sys/portrait/item/public.1.b0f75b4f.gVariaQwzy_hz4WmRhvS-g.jpg"
-      />
+const App = () => {
+  const [todos, setTodos] = useState(defaultTodos)
+
+  const onToggle = id => {
+    setTodos(todos.map(item => {
+      if (item.id === id) {
+        // item.done = !item.done
+        return {
+          ...item,
+          done: !item.done,
+        }
+      }
+      return item
+    }))
+  }
+
+  return (
+    <div className="app">
+      <h3>待办任务列表：</h3>
+      {todos.map(item => {
+        return (
+          <Todo key={item.id} {...item} handle={onToggle} />
+          // <Todo
+          //   key={item.id}
+          //   id={item.id}
+          //   text={item.text}
+          //   done={item.done}
+          //   handle={onToggle}
+          // />
+        )
+      })}
     </div>
   )
 }
