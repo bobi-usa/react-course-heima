@@ -1,16 +1,22 @@
 .app {
-  position: relative;
-  height: 500px;
-  width: 600px;
-  margin: 50px auto 0;
-  padding: 10px;
-  border: 1px solid #d5d5d5;
-  box-sizing: border-box;
+  width: 80%;
 }
 
-.chat-room {
-  height: 400px;
-  margin-top: 10px;
+.todo {
+  display: flex;
   padding: 10px;
-  border: 2px dashed skyblue;
+  margin-bottom: 15px;
+  background-color: skyblue;
+  cursor: pointer;
+
+  div {
+    flex: 1;
+  }
+}
+
+.todo-done {
+  div {
+    color: #fff;
+    text-decoration: line-through;
+  }
 }
