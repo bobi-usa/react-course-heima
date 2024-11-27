@@ -1,4 +1,6 @@
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { fetchChannelList } from "./store/modules/channelStore"
 // 导入actionCreator
 import { increment, decrement, addToNum } from './store/modules/counterStore'
 // 用于自己测试
@@ -10,6 +12,13 @@ const App = () => {
   const dispatch = useDispatch()
 
   const { list } = useSelector(state => state.test)
+
+  const { channelList } = useSelector(state => state.channel)
+
+  useEffect(() => {
+    // 使用 useEffect 触发异步请求执行
+    dispatch(fetchChannelList())
+  }, [dispatch])
 
   return (
     <div>
@@ -25,6 +34,12 @@ const App = () => {
       <button onClick={() => { dispatch(addList(4)) }}>添加list</button>
       {list}
       <button onClick={() => { dispatch(deleteList(1)) }}>删除list</button>
+
+      <hr />
+
+      <ul>
+        {channelList.map(item => <li key={item.id}>{item.name}</li>)}
+      </ul>
     </div>
   )
 }

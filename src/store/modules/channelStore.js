@@ -1,28 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteList } from "./testStore";
+import axios from "axios";
 
-const counterStore = createSlice({
-  name: 'counter',
+const channelStore = createSlice({
+  name: 'channel',
   initialState: {
-    count: 0,
+    channelList: [],
   },
   reducers: {
-    increment(state) {
-      state.count++
-    },
-    decrement(state) {
-      state.count--
+    setChannels(state, action) {
+      state.channelList = action.payload
     },
   },
 })
 
-//action creator
-const { increment, decrement } = counterStore.actions
-const counterReducer = counterStore.reducer
+const { setChannels } = channelStore.actions
 
-export {
-  increment,
-  decrement,
+// 异步请求部分
+// fetchChannelList 是一个异步的 action creator, 被 Redux thunk 中间件扩展
+// 传入的参数 dispatch 由 Redux thunk拦截到是函数时，进行注入（还有getState）
+// setChannels 是一个同步的 action creator
+const fetchChannelList = () => {
+  return async (dispatch) => {
+    const res = await axios.get('http://geek.itheima.net/v1_0/channels')
+    dispatch(setChannels(res.data.data.channels))
+  }
 }
 
-export default counterReducer
+const channelReducer = channelStore.reducer
+
+export {
+  fetchChannelList,
+}
+
+export default channelReducer
